@@ -158,9 +158,9 @@ API_BASE_URL=https://api.example.com/v1
 3. **Select Source**: Choose "GitHub Actions" as the source
 4. **Automatic Deployment**: Every push to `main` branch will deploy automatically
 
-**Your site will be available at**: `https://your-username.github.io/auth-integration`
+**Your site will be available at**: `https://casparhealth.github.io/auth-integration`
 
-**Note**: Update `astro.config.mjs` with your actual GitHub username and repository name.
+**Note**: Configuration is already set up for `casparhealth` organization.
 
 ### Manual Deployment
 ```bash
