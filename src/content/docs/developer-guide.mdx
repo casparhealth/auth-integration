@@ -1,0 +1,440 @@
+---
+title: Developer Guide
+description: Comprehensive developer guide for API documentation platform
+---
+
+# Developer Guide
+
+This guide provides comprehensive information for developers working with the Auth Integration API documentation platform.
+
+## 🏗️ Architecture Overview
+
+### Technology Stack
+- **Frontend Framework**: Astro 5.6.1 with Starlight documentation theme
+- **API Documentation**: OpenAPI 3.0 specification with starlight-openapi plugin
+- **Authentication**: AWS Cognito OAuth2 client credentials flow
+- **Build System**: Vite with TypeScript support
+- **Deployment**: Static site generation with multi-environment support
+
+### Project Structure
+```
+auth_integration/
+├── src/
+│   ├── content/docs/          # Documentation content (MDX)
+│   │   ├── developer-guide.mdx
+│   │   ├── setup-guide.mdx
+│   │   ├── cognito-test.mdx
+│   │   └── index.mdx
+│   └── assets/                # Static assets
+├── config.js                  # Environment configuration
+├── openapi.yaml              # API specification
+├── astro.config.mjs          # Astro/Starlight configuration
+├── test-cognito.html         # Standalone test interface
+├── env.example               # Environment variable template
+└── .gitignore                # Git ignore configuration
+```
+
+## 🔧 Configuration Management
+
+### Environment Configuration System
+
+The application uses a hierarchical configuration system that supports multiple environments:
+
+#### Configuration Hierarchy
+1. **Environment Variables** (highest priority)
+2. **Environment-specific files** (`.env.local`, `.env.staging.local`)
+3. **Default configuration** (`config.js`)
+
+#### Environment Files
+- **Development**: `.env.local` - Local development configuration
+- **Staging**: `.env.staging.local` - Pre-production testing configuration
+- **Production**: Environment variables set in hosting platform
+
+### Configuration Schema
+
+```javascript
+// config.js - Environment configuration template
+const config = {
+  development: {
+    nodeEnv: 'development',
+    cognito: {
+      domain: process.env.COGNITO_DOMAIN || 'your-dev-cognito-domain.auth.region.amazoncognito.com',
+      clientId: process.env.COGNITO_CLIENT_ID || 'your_dev_client_id',
+      clientSecret: process.env.COGNITO_CLIENT_SECRET || 'your_dev_client_secret',
+      scope: process.env.COGNITO_SCOPE || 'backend-api-v3-admins/auths:read',
+    },
+    api: {
+      baseUrl: process.env.API_BASE_URL || 'http://localhost:3000/v1',
+    },
+  },
+  // ... staging and production configurations
+};
+```
+
+## 🚀 Development Workflow
+
+### Local Development Setup
+
+#### 1. Environment Configuration
+```bash
+# Copy environment template
+cp env.example .env.local
+
+# Configure development environment
+nano .env.local
+```
+
+#### 2. Development Server
+```bash
+# Start development server
+npm run dev
+
+# Access documentation at http://localhost:4321
+```
+
+#### 3. Environment-Specific Development
+```bash
+# Development environment
+npm run dev
+
+# Staging environment
+npm run dev:staging
+
+# Production environment
+npm run dev:prod
+```
+
+### Build Process
+
+#### Static Site Generation
+The application uses Astro's static site generation for optimal performance:
+
+```bash
+# Development build
+npm run build
+
+# Staging build
+npm run build:staging
+
+# Production build
+npm run build:prod
+```
+
+#### Build Output
+- **Output Directory**: `dist/`
+- **Static Assets**: Optimized and bundled
+- **API Documentation**: Generated from OpenAPI specification
+- **Environment Configuration**: Injected at build time
+
+## 🔐 Security Implementation
+
+### Credential Management
+
+#### Environment Variable Security
+- **Local Development**: Credentials stored in `.env.local` (excluded from version control)
+- **Staging**: Credentials stored in `.env.staging.local` (excluded from version control)
+- **Production**: Credentials injected via hosting platform environment variables
+
+#### Git Security Configuration
+```gitignore
+# Environment files (excluded from version control)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging.local
+
+# Configuration files with secrets
+config.local.js
+secrets.js
+credentials.json
+```
+
+### AWS Cognito Integration
+
+#### OAuth2 Client Credentials Flow
+```javascript
+// Example: Cognito token request
+const formData = new URLSearchParams();
+formData.append('grant_type', 'client_credentials');
+formData.append('client_id', clientId);
+formData.append('client_secret', clientSecret);
+formData.append('scope', scope);
+
+const response = await fetch(`${cognitoDomain}/oauth2/token`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  body: formData,
+});
+```
+
+#### Token Management
+- **Access Tokens**: JWT tokens for API authentication
+- **Token Refresh**: Automatic token renewal
+- **Scope Management**: Granular permission control
+
+## 📚 API Documentation System
+
+### OpenAPI Specification
+
+#### Specification Structure
+```yaml
+openapi: 3.0.0
+info:
+  title: Auth Integration API
+  version: 1.0.0
+  description: Authentication API with AWS Cognito integration
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: https://staging-api.example.com/v1
+    description: Staging server
+  - url: http://localhost:3000/v1
+    description: Development server
+
+paths:
+  /oauth2/token:
+    post:
+      summary: Get OAuth2 Token (AWS Cognito)
+      # ... endpoint definition
+```
+
+#### Documentation Generation
+- **Automatic Generation**: API docs generated from OpenAPI specification
+- **API Documentation**: Complete OpenAPI specification with examples
+- **Code Examples**: Multi-language code samples
+- **Schema Documentation**: Complete request/response schemas
+
+### Starlight Integration
+
+#### Plugin Configuration
+```javascript
+// astro.config.mjs
+starlightOpenAPI([
+  {
+    base: 'api',
+    schema: './openapi.yaml',
+  },
+]),
+```
+
+#### Documentation Features
+- **Search**: Full-text search across documentation
+- **Navigation**: Automatic sidebar generation
+- **Responsive Design**: Mobile-optimized interface
+- **Dark Mode**: System preference detection
+
+## 🌐 Deployment Strategies
+
+### GitHub Pages Deployment
+
+#### 1. Repository Configuration
+```bash
+# Enable GitHub Pages in repository settings
+# Source: Deploy from a branch
+# Branch: gh-pages
+# Folder: / (root)
+```
+
+#### 2. GitHub Actions Workflow
+Create `.github/workflows/deploy.yml`:
+
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build
+      run: npm run build:prod
+      env:
+        NODE_ENV: production
+        COGNITO_DOMAIN: ${{ secrets.COGNITO_DOMAIN }}
+        COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
+        COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
+        COGNITO_SCOPE: ${{ secrets.COGNITO_SCOPE }}
+        API_BASE_URL: ${{ secrets.API_BASE_URL }}
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+```
+
+#### 3. Environment Variables Setup
+Configure secrets in GitHub repository settings:
+- `COGNITO_DOMAIN`: Production Cognito domain
+- `COGNITO_CLIENT_ID`: Production client ID
+- `COGNITO_CLIENT_SECRET`: Production client secret
+- `COGNITO_SCOPE`: OAuth2 scope
+- `API_BASE_URL`: Production API base URL
+
+### GitHub Pages Deployment
+
+#### 1. GitHub Actions Configuration
+The project includes a pre-configured GitHub Actions workflow for automatic deployment.
+
+#### 2. Environment Variables
+Set in GitHub repository secrets:
+- `NODE_ENV`: `production`
+- `COGNITO_DOMAIN`: Your production Cognito domain
+- `COGNITO_CLIENT_ID`: Your production client ID
+- `COGNITO_CLIENT_SECRET`: Your production client secret
+- `COGNITO_SCOPE`: Your OAuth2 scope
+- `API_BASE_URL`: Your production API base URL
+
+## 🧪 Testing Framework
+
+### API Testing
+
+#### API Documentation
+- **OpenAPI Specification**: Complete API documentation
+- **Code Examples**: Multiple programming languages
+- **Schema Documentation**: Detailed request/response schemas
+- **Environment Switching**: Test different environments
+
+#### Automated Testing
+```bash
+# Run tests
+npm test
+
+# Test specific environment
+NODE_ENV=staging npm test
+```
+
+### Quality Assurance
+
+#### Code Quality
+```bash
+# Linting
+npm run lint
+
+# Type checking
+npm run type-check
+
+# Formatting
+npm run format
+```
+
+#### Security Scanning
+```bash
+# Dependency audit
+npm audit
+
+# Security scan
+npm run security-scan
+```
+
+## 🔄 CI/CD Pipeline
+
+### Continuous Integration
+
+#### Pre-commit Hooks
+```json
+// package.json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,mdx}": ["eslint --fix", "prettier --write"]
+  }
+}
+```
+
+#### GitHub Actions Workflow
+```yaml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run lint
+    - run: npm run type-check
+    - run: npm test
+```
+
+## 📊 Monitoring & Analytics
+
+### Performance Monitoring
+- **Build Performance**: Build time tracking
+- **Runtime Performance**: Page load metrics
+- **API Performance**: Response time monitoring
+
+### Error Tracking
+- **Build Errors**: CI/CD error reporting
+- **Runtime Errors**: Client-side error tracking
+- **API Errors**: Endpoint error monitoring
+
+## 🛠️ Development Tools
+
+### Recommended IDE Setup
+- **VS Code**: Recommended editor
+- **Extensions**: Astro, TypeScript, OpenAPI
+- **Settings**: Auto-format on save, lint on save
+
+### Debugging
+```bash
+# Debug mode
+npm run dev -- --verbose
+
+# Environment debugging
+NODE_ENV=development DEBUG=* npm run dev
+```
+
+## 📖 Documentation Standards
+
+### Writing Guidelines
+- **Clear Structure**: Logical information hierarchy
+- **Code Examples**: Working, tested code samples
+- **Cross-References**: Link related documentation
+- **Regular Updates**: Keep documentation current
+
+### Content Management
+- **Version Control**: Track documentation changes
+- **Review Process**: Peer review for accuracy
+- **User Feedback**: Incorporate user suggestions
+
+---
+
+This developer guide provides the foundation for working with the Auth Integration API documentation platform. For specific implementation details, refer to the individual component documentation.

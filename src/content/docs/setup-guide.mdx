@@ -1,0 +1,313 @@
+---
+title: Complete Setup Guide
+description: Step-by-step setup guide for all environments
+---
+
+# Complete Setup Guide
+
+This guide will walk you through setting up the Auth Integration API documentation for development, staging, and production environments.
+
+## 🚀 Quick Start (5 minutes)
+
+### 1. Clone and Install
+```bash
+git clone <your-repo>
+cd auth_integration
+npm install
+```
+
+### 2. Configure Development
+```bash
+# Copy example environment file
+cp env.example .env.local
+
+# Edit with your actual development credentials
+nano .env.local
+```
+
+### 3. Start Development Server
+```bash
+npm run dev
+```
+
+### 4. Test the Setup
+- Open `http://localhost:4321`
+- Click "Cognito Test" in the sidebar
+- Test your AWS Cognito integration
+
+## 🔧 Detailed Setup
+
+### Prerequisites
+
+- **Node.js** 18+ installed
+- **AWS Cognito** user pool configured
+- **Git** for version control
+- **Text editor** (VS Code recommended)
+
+### Step 1: Project Setup
+
+#### Clone the Repository
+```bash
+git clone <your-repo-url>
+cd auth_integration
+```
+
+#### Install Dependencies
+```bash
+npm install
+```
+
+#### Verify Installation
+```bash
+npm run dev
+# Should start server at http://localhost:4321
+```
+
+### Step 2: Environment Configuration
+
+#### Development Environment
+Create `.env.local` file (excluded from version control):
+```bash
+# .env.local
+NODE_ENV=development
+COGNITO_DOMAIN=your-dev-cognito-domain.auth.region.amazoncognito.com
+COGNITO_CLIENT_ID=your_dev_client_id
+COGNITO_CLIENT_SECRET=your_dev_client_secret
+COGNITO_SCOPE=backend-api-v3-admins/auths:read
+API_BASE_URL=http://localhost:3000/v1
+```
+
+#### Staging Environment
+Create `.env.staging.local` file (excluded from version control):
+```bash
+# .env.staging.local
+NODE_ENV=staging
+COGNITO_DOMAIN=your-staging-cognito-domain.auth.region.amazoncognito.com
+COGNITO_CLIENT_ID=your_staging_client_id
+COGNITO_CLIENT_SECRET=your_staging_client_secret
+COGNITO_SCOPE=backend-api-v3-admins/auths:read
+API_BASE_URL=https://staging-api.example.com/v1
+```
+
+#### Production Environment
+Configure environment variables in your hosting platform:
+```bash
+# Production Environment Variables
+NODE_ENV=production
+COGNITO_DOMAIN=your-prod-cognito-domain.auth.region.amazoncognito.com
+COGNITO_CLIENT_ID=your_prod_client_id
+COGNITO_CLIENT_SECRET=your_prod_client_secret
+COGNITO_SCOPE=backend-api-v3-admins/auths:read
+API_BASE_URL=https://api.example.com/v1
+```
+
+### Step 3: AWS Cognito Setup
+
+#### 1. Create Cognito User Pool
+1. Go to AWS Cognito Console
+2. Create a new User Pool
+3. Configure authentication settings
+4. Create an App Client
+5. Note down the Client ID and Client Secret
+
+#### 2. Configure OAuth2 Settings
+1. Enable OAuth2 flows
+2. Add your domain to allowed origins
+3. Configure scopes
+4. Set up redirect URLs
+
+#### 3. Test Cognito Integration
+```bash
+# Test with cURL
+curl -X POST "https://YOUR_COGNITO_DOMAIN/oauth2/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=client_credentials" \
+  -d "client_id=YOUR_CLIENT_ID" \
+  -d "client_secret=YOUR_CLIENT_SECRET" \
+  -d "scope=backend-api-v3-admins/auths:read"
+```
+
+### Step 4: Testing Different Environments
+
+#### Development Testing
+```bash
+# Start development server
+npm run dev
+
+# Test in browser
+open http://localhost:4321/cognito-test
+```
+
+#### Staging Testing
+```bash
+# Start staging server
+npm run dev:staging
+
+# Test in browser
+open http://localhost:4321/cognito-test
+```
+
+#### Production Testing
+```bash
+# Start production server
+npm run dev:prod
+
+# Test in browser
+open http://localhost:4321/cognito-test
+```
+
+### Step 5: Build and Deploy
+
+#### Build for Different Environments
+```bash
+# Development build
+npm run build
+
+# Staging build
+npm run build:staging
+
+# Production build
+npm run build:prod
+```
+
+#### Deploy to Hosting Platform
+
+##### GitHub Pages Deployment (Recommended)
+1. Push your code to a GitHub repository
+2. Enable GitHub Pages in repository settings
+3. Select "GitHub Actions" as the source
+4. Update `astro.config.mjs` with your GitHub username and repository name
+5. Push to `main` branch for automatic deployment
+
+**Your site will be available at**: `https://your-username.github.io/auth-integration`
+
+### Manual Deployment
+```bash
+# Build the project
+npm run build:prod
+
+# Upload dist/ folder to your hosting provider
+```
+
+## 🔒 Security Configuration
+
+### File Security
+- **Never commit** `.env*` files to git
+- **Always use** environment variables for production
+- **Rotate secrets** regularly
+- **Use different credentials** for each environment
+
+### Git Configuration
+The `.gitignore` file automatically protects against secret commits:
+```gitignore
+# Environment variables (KEEP LOCAL - NEVER COMMIT)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging.local
+```
+
+### Environment Variables
+- **Development**: Use `.env.local` file
+- **Staging**: Use `.env.staging.local` file
+- **Production**: Use hosting platform environment variables
+
+## 🧪 Testing Your Setup
+
+### 1. API Documentation
+Visit the [API Reference](/api/) page to view the complete API specification:
+- Review the OAuth2 token endpoint documentation
+- Check the request/response schemas
+- Use the provided code examples
+
+### 2. Documentation Test
+1. Go to `http://localhost:4321`
+2. Click "Cognito Test" in the sidebar
+3. Follow the examples provided
+
+### 3. API Documentation Test
+1. Go to `http://localhost:4321/api`
+2. View the complete API specification
+3. Use the provided code examples
+
+## 🚨 Troubleshooting
+
+### Common Issues
+
+#### 1. "Invalid Client Credentials"
+- Check your `client_id` and `client_secret`
+- Verify they match your Cognito App Client
+- Ensure the App Client is properly configured
+
+#### 2. "CORS Error"
+- Add your domain to Cognito allowed origins
+- Check if you're using the correct Cognito domain
+- Verify HTTPS is used for production
+
+#### 3. "Environment Variables Not Loading"
+- Check if `.env.local` file exists
+- Verify the file is in the project root
+- Restart the development server
+
+#### 4. "Build Errors"
+- Check if all dependencies are installed
+- Verify Node.js version (18+ required)
+- Check for syntax errors in configuration files
+
+### Debug Steps
+
+1. **Check Environment Variables**
+   ```bash
+   # Print current environment
+   echo $NODE_ENV
+   
+   # Check if .env.local exists
+   ls -la .env*
+   ```
+
+2. **Verify Cognito Configuration**
+   ```bash
+   # Test Cognito endpoint directly
+   curl -X POST "https://YOUR_COGNITO_DOMAIN/oauth2/token" \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "grant_type=client_credentials" \
+     -d "client_id=YOUR_CLIENT_ID" \
+     -d "client_secret=YOUR_CLIENT_SECRET" \
+     -d "scope=backend-api-v3-admins/auths:read"
+   ```
+
+3. **Check Server Logs**
+   ```bash
+   # Start with verbose logging
+   npm run dev -- --verbose
+   ```
+
+## 📚 Next Steps
+
+### 1. Customize the Documentation
+- Edit `openapi.yaml` to add more endpoints
+- Update `src/content/docs/` for custom pages
+- Modify `astro.config.mjs` for configuration
+
+### 2. Add More Features
+- Implement authentication middleware
+- Add more API endpoints
+- Create custom components
+
+### 3. Deploy to Production
+- Set up CI/CD pipeline
+- Configure monitoring
+- Set up backups
+
+## 🆘 Getting Help
+
+- Check the [Security Guide](/SECURITY-GUIDE.md) for credential management
+- Visit the [Cognito Test](/cognito-test) page for testing examples
+- Review the API Reference for detailed endpoint documentation
+- Check the console for any error messages
+
+---
+
+**Ready to get started?** Follow the Quick Start guide above to get up and running in 5 minutes!

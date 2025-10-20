@@ -1,0 +1,19 @@
+
+> dev
+> astro dev
+
+(node:86501) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+19:20:26 [starlight-openapi-plugin] Parsing OpenAPI schema at './openapi.yaml'.
+19:20:26 [types] Generated 2ms
+19:20:26 [content] Syncing content
+19:20:26 [content] Synced content
+19:20:26 [vite] Port 4321 is in use, trying another one...
+19:20:26 [vite] Port 4322 is in use, trying another one...
+
+ astro  v5.14.5 ready in 669 ms
+
+┃ Local    http://localhost:4323/
+┃ Network  use --host to expose
+
+19:20:26 watching for file changes...

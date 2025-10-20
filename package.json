@@ -1,0 +1,25 @@
+{
+  "name": "auth-integration-docs",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev --port 4321",
+    "dev:staging": "NODE_ENV=staging astro dev --port 4321",
+    "dev:prod": "NODE_ENV=production astro dev --port 4321",
+    "start": "astro dev --port 4321",
+    "build": "astro build",
+    "build:staging": "NODE_ENV=staging astro build",
+    "build:prod": "NODE_ENV=production astro build",
+    "build:github": "astro build",
+    "preview": "astro preview --port 4321",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.36.1",
+    "astro": "^5.6.1",
+    "sharp": "^0.34.2"
+  },
+  "devDependencies": {
+    "starlight-openapi": "^0.21.1"
+  }
+}
