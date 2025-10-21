@@ -27,6 +27,10 @@ nano .env.local
 
 ### 3. Start Development Server
 ```bash
+# Option 1: Use the convenience script (recommended)
+./start-dev.sh
+
+# Option 2: Use npm directly
 npm run dev
 ```
 
@@ -73,7 +77,7 @@ NODE_ENV=development
 COGNITO_DOMAIN=your-dev-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_dev_client_id
 COGNITO_CLIENT_SECRET=your_dev_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=http://localhost:3000/v1
 ```
 
@@ -85,7 +89,7 @@ NODE_ENV=staging
 COGNITO_DOMAIN=your-staging-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_staging_client_id
 COGNITO_CLIENT_SECRET=your_staging_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=https://staging-api.example.com/v1
 ```
 
@@ -97,7 +101,7 @@ NODE_ENV=production
 COGNITO_DOMAIN=your-prod-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_prod_client_id
 COGNITO_CLIENT_SECRET=your_prod_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=https://api.example.com/v1
 ```
 
@@ -124,14 +128,17 @@ curl -X POST "https://YOUR_COGNITO_DOMAIN/oauth2/token" \
   -d "grant_type=client_credentials" \
   -d "client_id=YOUR_CLIENT_ID" \
   -d "client_secret=YOUR_CLIENT_SECRET" \
-  -d "scope=backend-api-v3-admins/auths:read"
+  -d "scope=cognito-api-scope"
 ```
 
 ### Step 4: Testing Different Environments
 
 #### Development Testing
 ```bash
-# Start development server
+# Option 1: Use the convenience script (recommended)
+./start-dev.sh
+
+# Option 2: Use npm directly
 npm run dev
 
 # Test in browser
@@ -275,7 +282,7 @@ Visit the [API Reference](/api/) page to view the complete API specification:
      -d "grant_type=client_credentials" \
      -d "client_id=YOUR_CLIENT_ID" \
      -d "client_secret=YOUR_CLIENT_SECRET" \
-     -d "scope=backend-api-v3-admins/auths:read"
+     -d "scope=cognito-api-scope"
    ```
 
 3. **Check Server Logs**

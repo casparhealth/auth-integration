@@ -37,7 +37,7 @@ NODE_ENV=development
 COGNITO_DOMAIN=your-actual-dev-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_actual_dev_client_id
 COGNITO_CLIENT_SECRET=your_actual_dev_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=http://localhost:3000/v1
 ```
 
@@ -49,7 +49,7 @@ NODE_ENV=staging
 COGNITO_DOMAIN=your-actual-staging-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_actual_staging_client_id
 COGNITO_CLIENT_SECRET=your_actual_staging_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=https://staging-api.example.com/v1
 ```
 
@@ -61,7 +61,7 @@ NODE_ENV=production
 COGNITO_DOMAIN=your-actual-prod-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_actual_prod_client_id
 COGNITO_CLIENT_SECRET=your_actual_prod_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=https://api.example.com/v1
 ```
 

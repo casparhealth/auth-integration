@@ -48,7 +48,7 @@ paths:
                   description: AWS Cognito client secret
                 scope:
                   type: string
-                  example: "backend-api-v3-admins/auths:read"
+                  example: "cognito-api-scope"
                   description: OAuth2 scope for the requested token
               required:
                 - grant_type
@@ -62,21 +62,21 @@ paths:
                   grant_type: "client_credentials"
                   client_id: "your_dev_client_id"
                   client_secret: "your_dev_client_secret"
-                  scope: "backend-api-v3-admins/auths:read"
+                  scope: "cognito-api-scope"
               cognito_auth_staging:
                 summary: Staging Environment
                 value:
                   grant_type: "client_credentials"
                   client_id: "your_staging_client_id"
                   client_secret: "your_staging_client_secret"
-                  scope: "backend-api-v3-admins/auths:read"
+                  scope: "cognito-api-scope"
               cognito_auth_prod:
                 summary: Production Environment
                 value:
                   grant_type: "client_credentials"
                   client_id: "your_prod_client_id"
                   client_secret: "your_prod_client_secret"
-                  scope: "backend-api-v3-admins/auths:read"
+                  scope: "cognito-api-scope"
       responses:
         '200':
           description: Token obtained successfully
@@ -99,7 +99,7 @@ paths:
                     description: Token expiration time in seconds
                   scope:
                     type: string
-                    example: "backend-api-v3-admins/auths:read"
+                    example: "cognito-api-scope"
                     description: Granted scope
               required:
                 - access_token
