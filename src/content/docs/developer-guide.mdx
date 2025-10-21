@@ -24,13 +24,27 @@ auth_integration/
 │   │   ├── developer-guide.mdx
 │   │   ├── setup-guide.mdx
 │   │   ├── cognito-test.mdx
-│   │   └── index.mdx
-│   └── assets/                # Static assets
+│   │   ├── index.mdx
+│   │   ├── guides/
+│   │   │   └── example.md
+│   │   └── reference/
+│   │       └── example.md
+│   ├── assets/                # Static assets
+│   │   └── houston.webp
+│   └── content.config.ts      # Content configuration
+├── .github/
+│   └── workflows/
+│       └── deploy.yml         # GitHub Actions deployment
+├── .astro/                    # Astro build artifacts
+├── public/                    # Static public files
+│   └── favicon.svg
 ├── config.js                  # Environment configuration
 ├── openapi.yaml              # API specification
 ├── astro.config.mjs          # Astro/Starlight configuration
-├── test-cognito.html         # Standalone test interface
 ├── env.example               # Environment variable template
+├── start-dev.sh              # Development server script
+├── package.json              # Dependencies and scripts
+├── tsconfig.json             # TypeScript configuration
 └── .gitignore                # Git ignore configuration
 ```
 
@@ -61,7 +75,7 @@ const config = {
       domain: process.env.COGNITO_DOMAIN || 'your-dev-cognito-domain.auth.region.amazoncognito.com',
       clientId: process.env.COGNITO_CLIENT_ID || 'your_dev_client_id',
       clientSecret: process.env.COGNITO_CLIENT_SECRET || 'your_dev_client_secret',
-      scope: process.env.COGNITO_SCOPE || 'backend-api-v3-admins/auths:read',
+      scope: process.env.COGNITO_SCOPE || 'cognito-api-scope',
     },
     api: {
       baseUrl: process.env.API_BASE_URL || 'http://localhost:3000/v1',
@@ -86,7 +100,10 @@ nano .env.local
 
 #### 2. Development Server
 ```bash
-# Start development server
+# Option 1: Use the convenience script (recommended)
+./start-dev.sh
+
+# Option 2: Use npm directly
 npm run dev
 
 # Access documentation at http://localhost:4321
@@ -104,10 +121,31 @@ npm run dev:staging
 npm run dev:prod
 ```
 
-### Build Process
+### Development Scripts
 
-#### Static Site Generation
-The application uses Astro's static site generation for optimal performance:
+#### `start-dev.sh` - Convenience Script
+This script ensures a clean development environment:
+
+**Usage:**
+```bash
+# Make executable (first time only)
+chmod +x start-dev.sh
+
+# Start development server
+./start-dev.sh
+```
+
+#### Manual Development Commands
+```bash
+# Development server
+npm run dev
+
+# Staging environment
+npm run dev:staging
+
+# Production environment
+npm run dev:prod
+```
 
 ```bash
 # Development build
@@ -310,41 +348,133 @@ Set in GitHub repository secrets:
 
 ## 🧪 Testing Framework
 
-### API Testing
+### Current Testing Setup
 
-#### API Documentation
-- **OpenAPI Specification**: Complete API documentation
-- **Code Examples**: Multiple programming languages
-- **Schema Documentation**: Detailed request/response schemas
-- **Environment Switching**: Test different environments
+**This project currently does NOT have a traditional testing framework configured.** Here's what's available and what you can add:
 
-#### Automated Testing
+#### Available Commands
 ```bash
-# Run tests
-npm test
+# Development server (with hot reload)
+npm run dev
 
-# Test specific environment
-NODE_ENV=staging npm test
+# Build verification
+npm run build
+
+# Preview built site
+npm run preview
 ```
 
-### Quality Assurance
+#### What Happens When You Run `npm test`
+**Currently**: `npm test` will fail because no test script is defined in `package.json`.
 
-#### Code Quality
+**To add testing, you would need to:**
+1. Install a testing framework (Jest, Vitest, etc.)
+2. Add test scripts to `package.json`
+3. Create test files
+
+#### Recommended Testing Setup
+
+**For a documentation project like this, consider:**
+
 ```bash
-# Linting
-npm run lint
+# Install testing dependencies
+npm install --save-dev vitest @vitest/ui jsdom
 
-# Type checking
-npm run type-check
-
-# Formatting
-npm run format
+# Add to package.json scripts:
+"test": "vitest",
+"test:ui": "vitest --ui",
+"test:run": "vitest run"
 ```
 
-#### Security Scanning
+**Test types you might want:**
+- **Build tests**: Verify the site builds without errors
+- **Content tests**: Check for broken links, missing images
+- **API tests**: Validate OpenAPI specification
+- **Accessibility tests**: Ensure docs are accessible
+
+### Security Commands
+
+#### `npm audit`
+**What it does:**
+- Scans your `package.json` and `package-lock.json` for known vulnerabilities
+- Checks dependencies against npm's security database
+- Reports security issues and suggests fixes
+
+**Usage:**
 ```bash
-# Dependency audit
+# Check for vulnerabilities
 npm audit
+
+# Fix automatically (where possible)
+npm audit fix
+
+# Fix with breaking changes
+npm audit fix --force
+```
+
+**Example output:**
+```
+found 0 vulnerabilities in 1234 scanned packages
+```
+
+#### `npm audit` vs Security Scans
+
+**`npm audit`:**
+- ✅ Built into npm
+- ✅ Checks known vulnerabilities
+- ✅ Quick and easy
+- ❌ Only checks npm packages
+- ❌ Doesn't check code quality
+
+**Security Scans (GitHub Dependabot, Snyk, etc.):**
+- ✅ More comprehensive
+- ✅ Checks for license issues
+- ✅ Monitors for new vulnerabilities
+- ✅ Can check custom code
+- ❌ Requires external service
+
+#### Recommended Security Workflow
+
+```bash
+# 1. Regular security checks
+npm audit
+
+# 2. Update dependencies
+npm update
+
+# 3. Check for outdated packages
+npm outdated
+
+# 4. Clean install
+npm ci
+```
+
+### Testing Strategy for Documentation
+
+**For this documentation project, focus on:**
+
+1. **Build Verification**
+   ```bash
+   # Ensure site builds successfully
+   npm run build
+   npm run preview
+   ```
+
+2. **Content Validation**
+   - Check for broken internal links
+   - Verify OpenAPI spec is valid
+   - Ensure all images load
+
+3. **Deployment Testing**
+   - Test GitHub Pages deployment
+   - Verify environment-specific builds
+   - Check relative vs absolute links
+
+4. **Security Best Practices**
+   - Regular `npm audit` checks
+   - Keep dependencies updated
+   - Use `.gitignore` for secrets
+   - Environment variable validation
 
 # Security scan
 npm run security-scan

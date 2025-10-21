@@ -1,9 +1,9 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Trigger the workflow every time you push to the `main` branch
+  # Deploy on pushes to main and feature branches
   push:
-    branches: [ main ]
+    branches: [ main, "feature/*" ]
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
 

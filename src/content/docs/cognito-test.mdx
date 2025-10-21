@@ -21,7 +21,7 @@ NODE_ENV=development
 COGNITO_DOMAIN=your-dev-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_dev_client_id
 COGNITO_CLIENT_SECRET=your_dev_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=http://localhost:3000/v1
 ```
 
@@ -33,7 +33,7 @@ NODE_ENV=staging
 COGNITO_DOMAIN=your-staging-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_staging_client_id
 COGNITO_CLIENT_SECRET=your_staging_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=https://staging-api.example.com/v1
 ```
 
@@ -45,7 +45,7 @@ NODE_ENV=production
 COGNITO_DOMAIN=your-prod-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_prod_client_id
 COGNITO_CLIENT_SECRET=your_prod_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=https://api.example.com/v1
 ```
 
@@ -64,7 +64,7 @@ nano .env.local
 
 The easiest way to understand the Cognito API is through the complete API documentation:
 
-**Direct Link**: [API Reference - OAuth2 Token Endpoint](https://casparhealth.github.io/auth-integration/api/)
+**Direct Link**: [API Reference - OAuth2 Token Endpoint](/auth-integration/api/)
 
 This page provides:
 - **Complete Specification**: Full OpenAPI documentation
@@ -76,7 +76,10 @@ This page provides:
 
 #### Development
 ```bash
-# Start development server
+# Option 1: Use the convenience script (recommended)
+./start-dev.sh
+
+# Option 2: Use npm directly
 npm run dev
 
 # Test with development credentials
@@ -85,7 +88,7 @@ curl -X POST "https://YOUR_DEV_COGNITO_DOMAIN/oauth2/token" \
   -d "grant_type=client_credentials" \
   -d "client_id=YOUR_DEV_CLIENT_ID" \
   -d "client_secret=YOUR_DEV_CLIENT_SECRET" \
-  -d "scope=backend-api-v3-admins/auths:read"
+  -d "scope=cognito-api-scope"
 ```
 
 #### Staging
@@ -99,7 +102,7 @@ curl -X POST "https://YOUR_STAGING_COGNITO_DOMAIN/oauth2/token" \
   -d "grant_type=client_credentials" \
   -d "client_id=YOUR_STAGING_CLIENT_ID" \
   -d "client_secret=YOUR_STAGING_CLIENT_SECRET" \
-  -d "scope=backend-api-v3-admins/auths:read"
+  -d "scope=cognito-api-scope"
 ```
 
 #### Production
@@ -113,7 +116,7 @@ curl -X POST "https://YOUR_PROD_COGNITO_DOMAIN/oauth2/token" \
   -d "grant_type=client_credentials" \
   -d "client_id=YOUR_PROD_CLIENT_ID" \
   -d "client_secret=YOUR_PROD_CLIENT_SECRET" \
-  -d "scope=backend-api-v3-admins/auths:read"
+  -d "scope=cognito-api-scope"
 ```
 
 ### 1. Using cURL (Generic)
@@ -124,7 +127,7 @@ curl -X POST "https://YOUR_COGNITO_DOMAIN/oauth2/token" \
   -d "grant_type=client_credentials" \
   -d "client_id=YOUR_CLIENT_ID" \
   -d "client_secret=YOUR_CLIENT_SECRET" \
-  -d "scope=backend-api-v3-admins/auths:read"
+  -d "scope=cognito-api-scope"
 ```
 
 ### 2. Using JavaScript (Browser)
@@ -135,7 +138,7 @@ async function getCognitoToken() {
   formData.append('grant_type', 'client_credentials');
   formData.append('client_id', 'YOUR_CLIENT_ID');
   formData.append('client_secret', 'YOUR_CLIENT_SECRET');
-  formData.append('scope', 'backend-api-v3-admins/auths:read');
+  formData.append('scope', 'cognito-api-scope');
 
   try {
     const response = await fetch('https://YOUR_COGNITO_DOMAIN/oauth2/token', {
@@ -173,7 +176,7 @@ async function getCognitoToken() {
   formData.append('grant_type', 'client_credentials');
   formData.append('client_id', 'YOUR_CLIENT_ID');
   formData.append('client_secret', 'YOUR_CLIENT_SECRET');
-  formData.append('scope', 'backend-api-v3-admins/auths:read');
+  formData.append('scope', 'cognito-api-scope');
 
   try {
     const response = await fetch('https://YOUR_COGNITO_DOMAIN/oauth2/token', {
@@ -210,7 +213,7 @@ getCognitoToken();
   "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
   "token_type": "Bearer",
   "expires_in": 3600,
-  "scope": "backend-api-v3-admins/auths:read"
+  "scope": "cognito-api-scope"
 }
 ```
 
@@ -249,7 +252,7 @@ NODE_ENV=development
 COGNITO_DOMAIN=your-dev-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_dev_client_id
 COGNITO_CLIENT_SECRET=your_dev_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=http://localhost:3000/v1
 ```
 
@@ -261,7 +264,7 @@ NODE_ENV=staging
 COGNITO_DOMAIN=your-staging-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_staging_client_id
 COGNITO_CLIENT_SECRET=your_staging_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=https://staging-api.example.com/v1
 ```
 
@@ -273,7 +276,7 @@ NODE_ENV=production
 COGNITO_DOMAIN=your-prod-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_prod_client_id
 COGNITO_CLIENT_SECRET=your_prod_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=https://api.example.com/v1
 ```
 

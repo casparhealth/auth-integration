@@ -23,6 +23,10 @@ nano .env.local
 
 ### 3. Start Development Server
 ```bash
+# Option 1: Use the convenience script (recommended)
+./start-dev.sh
+
+# Option 2: Use npm directly
 npm run dev
 # Server will start on http://localhost:4321
 ```
@@ -82,6 +86,7 @@ auth_integration/
 ├── openapi.yaml              # API specification
 ├── astro.config.mjs          # Astro/Starlight configuration
 ├── test-cognito.html         # Standalone test page
+├── start-dev.sh             # Development server convenience script
 ├── env.example               # Example environment variables
 ├── .gitignore                # Git ignore rules
 └── SECURITY-GUIDE.md         # Security documentation
@@ -98,7 +103,7 @@ NODE_ENV=development
 COGNITO_DOMAIN=your-dev-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_dev_client_id
 COGNITO_CLIENT_SECRET=your_dev_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=http://localhost:3000/v1
 ```
 
@@ -109,7 +114,7 @@ NODE_ENV=staging
 COGNITO_DOMAIN=your-staging-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_staging_client_id
 COGNITO_CLIENT_SECRET=your_staging_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=https://staging-api.example.com/v1
 ```
 
@@ -121,7 +126,7 @@ NODE_ENV=production
 COGNITO_DOMAIN=your-prod-cognito-domain.auth.region.amazoncognito.com
 COGNITO_CLIENT_ID=your_prod_client_id
 COGNITO_CLIENT_SECRET=your_prod_client_secret
-COGNITO_SCOPE=backend-api-v3-admins/auths:read
+COGNITO_SCOPE=cognito-api-scope
 API_BASE_URL=https://api.example.com/v1
 ```
 
